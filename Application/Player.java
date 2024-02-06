@@ -24,8 +24,8 @@ public class Player {
     public void move(int steps) {
         // Déplacez le joueur en fonction du nombre obtenu lors du lancer de dés
         currentPosition += steps;
-        if (currentPosition >= Board.NUM_PROPERTIES) {
-            currentPosition -= Board.NUM_PROPERTIES; // Revient au début du plateau si nécessaire
+        if (currentPosition >= Board.NUM_CASES) {
+            currentPosition -= Board.NUM_CASES; // Revient au début du plateau si nécessaire
         }
     }
 

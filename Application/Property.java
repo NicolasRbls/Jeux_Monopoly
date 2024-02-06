@@ -3,15 +3,13 @@ public class Property extends Case {
     private int price;
     private Player owner;
     private int baseRent;
-    private static int nextId = -1; // initialisation à -1 pour que la première propriété ait un id de 0
-    private int id;
+    
 
     public Property(String name, int price, int baseRent) {
         super(name);
         this.price = price;
         this.owner = null; // La propriété n'a pas de propriétaire au départ
         this.baseRent = baseRent;
-        this.id = ++nextId; // un identifiant unique à chaque nouvelle instance et l'incrémenter
 
     }
 

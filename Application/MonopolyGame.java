@@ -29,17 +29,19 @@ public class MonopolyGame {
     }
 
     public void initializePlayers() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Combien de joueurs ? ");
-        int numPlayers = scanner.nextInt();
-
-        for (int i = 0; i < numPlayers; i++) {
-            System.out.print("Nom du joueur " + (i + 1) + ": ");
-            String playerName = scanner.next();
-            Player player = new Player(playerName);
-            players.add(player);
-        }
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.print("Combien de joueurs ? ");
+            int numPlayers = scanner.nextInt();
+    
+            for (int i = 0; i < numPlayers; i++) {
+                System.out.print("Nom du joueur " + (i + 1) + ": ");
+                String playerName = scanner.next();
+                Player player = new Player(playerName);
+                players.add(player);
+            }
+        } // le scanner sera fermé automatiquement à la fin du bloc try
     }
+    
 
     public void initializeBoard() {
         // Initialisation du plateau de jeu (ajoutez des cases, des propriétés, etc.)
@@ -63,17 +65,23 @@ public class MonopolyGame {
 
     public void displayGameState() {
         System.out.println("État du jeu :");
-        
-        // Afficher les informations du plateau (propriétés/cases)
-        for (Property property : board.getProperties()) {
-            System.out.println("Case " + property.getName() + " - Prix : " + property.getPrice());
+    
+        // Afficher les informations des cases
+        for (Case aCase : board.getCases()) {
+            if (aCase instanceof Property) {
+                Property property = (Property) aCase;
+                System.out.println("Propriété " + property.getName() + " - Prix : " + property.getPrice());
+            } else {
+                System.out.println("Case " + aCase.getNom());
+            }
         }
-        
+    
         // Afficher les informations des joueurs
         for (Player player : players) {
             System.out.println(player.getName() + " - Argent : " + player.getMoney() + " - Position : " + player.getCurrentPosition());
         }
     }
+    
     
 
     public static void main(String[] args) {

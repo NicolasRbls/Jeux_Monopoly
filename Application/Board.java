@@ -2,34 +2,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
-    private List<Property> properties;
-    public static final int NUM_PROPERTIES = 2; //le nombre total de propriétés
-    
+    private List<Case> cases;
+    public static final int NUM_CASES = 2; // le nombre total de cases
 
     public Board() {
-        properties = new ArrayList<>();
+        cases = new ArrayList<>();
     }
 
     public void initialize() {
-        // ici les propriétés/cases du Monopoly au plateau
-        Property property1 = new Property("Propriété 1", 250, 75);
-        Property property2 = new Property("Propriété 2", 300, 90);
-        // ajoutez d'autres propriétés...
+        // ici les différentes cases du Monopoly au plateau
+        addCase(new Property("Propriété 1", 250, 75));
+        addCase(new Property("Propriété 2", 300, 90));
+        // ajoutez d'autres types de cases 
 
-        // ne pas dépasser la limite maximale
-        if (properties.size() > NUM_PROPERTIES) {
-            throw new IllegalStateException("Le nombre maximum de propriétés a été atteint.");
+        // Ne pas dépasser la limite maximale
+        if (cases.size() > NUM_CASES) {
+            throw new IllegalStateException("Le nombre maximum de cases a été atteint.");
         }
     }
 
-    public List<Property> getProperties() {
-        return properties;
+    public List<Case> getCases() {
+        return cases;
     }
 
     public Property getPropertyById(int id) {
-        for (Property property : properties) {
-            if (property.getId() == id) {
-                return property;
+        for (Case aCase : cases) {
+            if (aCase instanceof Property) {
+                Property property = (Property) aCase;
+                if (property.getId() == id) {
+                    return property;
+                }
             }
         }
         return null; // Si la propriété n'est pas trouvée
@@ -37,19 +39,27 @@ public class Board {
 
     public List<Property> getAvailableProperties() {
         List<Property> availableProperties = new ArrayList<>();
-        for (Property property : properties) {
-            if (property.getOwner() == null) {
-                availableProperties.add(property);
+        for (Case aCase : cases) {
+            if (aCase instanceof Property) {
+                Property property = (Property) aCase;
+                if (property.getOwner() == null) {
+                    availableProperties.add(property);
+                }
             }
         }
         return availableProperties;
     }
+    // Méthodes pour gérer les propriétés, les gares, les compagnies, les loyers, les améliorations, etc.
 
     public void purchaseProperty(Player player, Property property) {
         if (player.getMoney() >= property.getPrice() && property.getOwner() == null) {
             player.retirerArgent(property.getPrice());
             property.setOwner(player);
         }
+    }
+
+    public void addCase(Case aCase) {
+        cases.add(aCase);
     }
 
     // Méthodes pour gérer les loyers, les améliorations de propriétés, etc.
