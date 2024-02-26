@@ -5,8 +5,8 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
-        money = 1500; // Argent initial du joueur
-        currentPosition = 0; // Position de départ
+        money = 1500; //argent initial 
+        currentPosition = 0; //position de départ
     }
 
     public String getName() {

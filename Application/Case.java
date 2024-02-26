@@ -1,11 +1,11 @@
 public abstract class Case {
     protected String nom;
-    protected static int nextId = -1; // initialisation à -1 pour que la première propriété ait un id de 0
+    protected static int nextId = -1; //initialisation à -1 pour que la première propriété ait un id de 0
     protected int id;
 
     public Case(String nom) {
         this.nom = nom;
-        this.id = ++nextId; // un identifiant unique à chaque nouvelle instance et l'incrémenter
+        this.id = ++nextId; //un identifiant unique à chaque nouvelle instance et l'incrémenter
     }
 
     public String getNom() {
@@ -16,6 +16,6 @@ public abstract class Case {
         return id;
     }
 
-    // Méthode abstraite pour gérer les actions spécifiques à chaque type de case
+    //méthode abstraite
     public abstract void effectuerAction(Player joueur);
 }

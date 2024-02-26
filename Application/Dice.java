@@ -8,6 +8,6 @@ public class Dice {
     }
 
     public int roll() {
-        return random.nextInt(6) + 1; // Lancer de dé standard à 6 faces
+        return random.nextInt(6) + 1; //lancer de dé 
     }
 }

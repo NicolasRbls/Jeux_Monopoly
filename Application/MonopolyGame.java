@@ -24,7 +24,7 @@ public class MonopolyGame {
             displayGameState();
             rounds++;
         }
-
+        displayOwnedProperties(); //affiche les propriétés possédées à la fin du jeu
         System.out.println("Le jeu est terminé !");
     }
 
@@ -45,7 +45,7 @@ public class MonopolyGame {
     
 
     public void initializeBoard() {
-        // Initialisation du plateau de jeu
+        //initialisation du plateau de jeu
         board.initialize();
     }
 
@@ -57,7 +57,7 @@ public class MonopolyGame {
             System.out.println(player.getName() + " lance les dés et obtient " + roll);
             player.move(roll);
             
-            // Trouver la case correspondant à la position actuelle du joueur
+            //trouve la case correspondant à la position actuelle du joueur
             Case currentCase = null;
             for (Case aCase : board.getCases()) {
                 if (aCase.getId() == player.getCurrentPosition() && aCase instanceof Property) {
@@ -66,7 +66,7 @@ public class MonopolyGame {
                 }
             }
             
-            // Si la case actuelle est une propriété, laissez le joueur l'acheter
+            //si la case est une propriété, le joueur peut l'acheter
             if (currentCase instanceof Property) {
                 Property property = (Property) currentCase;
                 property.effectuerAction(player);
@@ -81,10 +81,10 @@ public class MonopolyGame {
     public void displayGameState() {
         System.out.println("État du jeu :");
     
-        // Afficher les informations des joueurs
+        //afficher les infos des joueurs
         for (Player player : players) {
             System.out.print(player.getName() + " - Argent : " + player.getMoney() + " - Position : " + player.getCurrentPosition() + " - ");
-            // Trouver la case correspondant à la position actuelle du joueur
+            //trouve la case correspondant à la position actuelle du joueur
             Case currentCase = null;
             for (Case aCase : board.getCases()) {
                 if (aCase.getId() == player.getCurrentPosition()) {
@@ -101,6 +101,19 @@ public class MonopolyGame {
                 }
             } else {
                 System.out.println("Aucune case trouvée.");
+            }
+        }
+    }
+
+    public void displayOwnedProperties() {
+        System.out.println("Propriétés possédées par les joueurs :");
+        
+        for (Case aCase : board.getCases()) {
+            if (aCase instanceof Property) {
+                Property property = (Property) aCase;
+                if (property.getOwner() != null) {
+                    System.out.println(property.getName() + " - Propriétaire : " + property.getOwner().getName());
+                }
             }
         }
     }

@@ -7,7 +7,7 @@ public class Property extends Case {
     public Property(String name, int price, int baseRent) {
         super(name);
         this.price = price;
-        this.owner = null; // La propriété n'a pas de propriétaire au départ
+        this.owner = null; //la propriété n'a pas de propriétaire au debut
         this.baseRent = baseRent;
 
     }
@@ -43,9 +43,9 @@ public class Property extends Case {
     @Override
     public void effectuerAction(Player joueur) {
         if (owner == null) {
-            // La propriété n'a pas de propriétaire, le joueur peut choisir de l'acheter
+            //si la propriété n'a pas de propriétaire, le joueur peut l'acheter
             if (joueur.getMoney() >= price) {
-                // Le joueur a suffisamment d'argent pour acheter la propriété
+                //le joueur a suffisamment d'argent pour acheter la propriété
                 joueur.retirerArgent(price);
                 setOwner(joueur);
                 System.out.println(joueur.getName() + " a acheté la propriété " + getName());
@@ -53,7 +53,7 @@ public class Property extends Case {
                 System.out.println(joueur.getName() + " n'a pas assez d'argent pour acheter la propriété " + getName());
             }
         } else if (owner != joueur) {
-            // La propriété a un propriétaire autre que le joueur actuel, collecter le loyer
+            //la propriété a un propriétaire autre que le joueur actuel, collecter le loyer
             int loyer = calculateRent();
             joueur.retirerArgent(loyer);
             owner.ajouterArgent(loyer);
