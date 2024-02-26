@@ -1,6 +1,6 @@
 public abstract class Case {
-    private String nom;
-    private static int nextId = -1; // initialisation à -1 pour que la première propriété ait un id de 0
+    protected String nom;
+    protected static int nextId = -1; // initialisation à -1 pour que la première propriété ait un id de 0
     protected int id;
 
     public Case(String nom) {

@@ -1,5 +1,4 @@
 public class Property extends Case {
-    private String name;
     private int price;
     private Player owner;
     private int baseRent;
@@ -22,7 +21,7 @@ public class Property extends Case {
     }
 
     public String getName(){
-        return name;
+        return nom;
     }
 
     public Player getOwner() {

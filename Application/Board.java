@@ -3,19 +3,39 @@ import java.util.List;
 
 public class Board {
     private List<Case> cases;
-    public static final int NUM_CASES = 2; // le nombre total de cases
+    public static final int NUM_CASES = 22 ; //le nombre total de cases
 
     public Board() {
         cases = new ArrayList<>();
     }
 
     public void initialize() {
-        // ici les différentes cases du Monopoly au plateau
-        addCase(new Property("Propriété 1", 250, 75));
-        addCase(new Property("Propriété 2", 300, 90));
-        // ajoutez d'autres types de cases 
+        //ici les différentes cases du Monopoly au plateau
+        addCase(new Property("Boulevard de Belleville", 60, 30));
+        addCase(new Property("Rue Lecourbe", 60, 30));
+        addCase(new Property("Avenue de la République", 100, 50));
+        addCase(new Property("Boulevard de la Villette", 100, 50));
+        addCase(new Property("Avenue de Neuilly", 120, 60));
+        addCase(new Property("Rue de Paradis", 140, 70));
+        addCase(new Property("Avenue Mozart", 140, 70));
+        addCase(new Property("Boulevard Saint-Michel", 160, 80));
+        addCase(new Property("Place Pigalle", 180, 90));
+        addCase(new Property("Avenue Matignon", 180, 90));
+        addCase(new Property("Boulevard Malesherbes", 200, 100));
+        addCase(new Property("Avenue Henri-Martin", 220, 110));
+        addCase(new Property("Cours de Vincennes", 220, 110));
+        addCase(new Property("Avenue de la République", 240, 120));
+        addCase(new Property("Rue de Courcelles", 260, 130));
+        addCase(new Property("Avenue de Neuilly", 260, 130));
+        addCase(new Property("Rue de la Fayette", 280, 140));
+        addCase(new Property("Avenue Niel", 300, 150));
+        addCase(new Property("Avenue Montaigne", 300, 150));
+        addCase(new Property("Boulevard Saint-Michel", 320, 160));
+        addCase(new Property("Avenue Foch", 350, 175));
+        addCase(new Property("Boulevard des Capucines", 400, 200));
+        //plusieur types de cases 
 
-        // Ne pas dépasser la limite maximale
+        //ne pas dépasser la limite maximale
         if (cases.size() > NUM_CASES) {
             throw new IllegalStateException("Le nombre maximum de cases a été atteint.");
         }
@@ -34,7 +54,7 @@ public class Board {
                 }
             }
         }
-        return null; // Si la propriété n'est pas trouvée
+        return null; //si la propriété n'est pas trouvée
     }
 
     public List<Property> getAvailableProperties() {
@@ -49,7 +69,6 @@ public class Board {
         }
         return availableProperties;
     }
-    // Méthodes pour gérer les propriétés, les gares, les compagnies, les loyers, les améliorations, etc.
 
     public void purchaseProperty(Player player, Property property) {
         if (player.getMoney() >= property.getPrice() && property.getOwner() == null) {
@@ -62,5 +81,4 @@ public class Board {
         cases.add(aCase);
     }
 
-    // Méthodes pour gérer les loyers, les améliorations de propriétés, etc.
 }

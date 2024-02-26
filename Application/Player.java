@@ -22,12 +22,12 @@ public class Player {
     }
 
     public void move(int steps) {
-        // Déplacez le joueur en fonction du nombre obtenu lors du lancer de dés
+        //deplacez le joueur en fonction du nombre obtenu lors du lancer de dés
         currentPosition += steps;
         if (currentPosition >= Board.NUM_CASES) {
-            currentPosition -= Board.NUM_CASES; // Revient au début du plateau si nécessaire
+            currentPosition -= Board.NUM_CASES; //revient au début du plateau si nécessaire
         }
-    }
+    }    
 
     public void ajouterArgent(int amount) {
         money += amount;
@@ -37,10 +37,14 @@ public class Player {
         if (money >= amount) {
             money -= amount;
         } else {
-            // Gérer la situation où le joueur n'a pas assez d'argent
+            //gerer la situation où le joueur n'a pas assez d'argent
             System.out.println("Attention, " + name + " n'a pas assez d'argent pour effectuer cette opération.");
         }
     }
 
-    // Méthodes pour gérer les propriétés, les transactions, etc.
+    public void setCurrentPosition(int position) {
+        this.currentPosition = position;
+    }
+    
+
 }
