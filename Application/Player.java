@@ -5,8 +5,8 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
-        money = 1500; //argent initial 
-        currentPosition = 0; //position de départ
+        money = 1500;
+        currentPosition = 0;
     }
 
     public String getName() {
@@ -22,12 +22,11 @@ public class Player {
     }
 
     public void move(int steps) {
-        //deplacez le joueur en fonction du nombre obtenu lors du lancer de dés
         currentPosition += steps;
         if (currentPosition >= Board.NUM_CASES) {
-            currentPosition -= Board.NUM_CASES; //revient au début du plateau si nécessaire
+            currentPosition -= Board.NUM_CASES;
         }
-    }    
+    }
 
     public void ajouterArgent(int amount) {
         money += amount;
@@ -37,7 +36,6 @@ public class Player {
         if (money >= amount) {
             money -= amount;
         } else {
-            //gerer la situation où le joueur n'a pas assez d'argent
             System.out.println("Attention, " + name + " n'a pas assez d'argent pour effectuer cette opération.");
         }
     }
@@ -45,6 +43,4 @@ public class Player {
     public void setCurrentPosition(int position) {
         this.currentPosition = position;
     }
-    
-
 }
