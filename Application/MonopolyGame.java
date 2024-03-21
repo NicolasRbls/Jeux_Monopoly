@@ -1,20 +1,20 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class MonopolyGame {
     private Board board;
     private List<Player> players;
     private Dice dice;
     private int rounds;
-    private Scanner scanner; // Ajout du scanner comme variable de classe
+    private IUserInterface ui;
 
-    public MonopolyGame() {
+
+    public MonopolyGame(IUserInterface ui) {
         board = new Board();
         players = new ArrayList<>();
         dice = new Dice();
         rounds = 0;
-        scanner = new Scanner(System.in); // Initialisation du scanner dans le constructeur
+        this.ui = ui;
     }
 
     public void playGame() {
@@ -28,20 +28,18 @@ public class MonopolyGame {
             rounds++;
         }
         displayOwnedProperties(); // Affiche les propriétés possédées à la fin du jeu
-        System.out.println("Le jeu est terminé !");
+        ui.displayMessage("Le jeu est terminé !");
         
-        // Fermez le scanner à la fin du jeu
-        scanner.close();
     }
 
-    
+
     public void initializePlayers() {
-        System.out.print("Combien de joueurs ? ");
-        int numPlayers = scanner.nextInt();
+        ui.displayMessage("Combien de joueurs ?");
+        int numPlayers = Integer.parseInt(ui.getInput());
 
         for (int i = 0; i < numPlayers; i++) {
-            System.out.print("Nom du joueur " + (i + 1) + ": ");
-            String playerName = scanner.next();
+            ui.displayMessage("Nom du joueur " + (i + 1) + ": ");
+            String playerName = ui.getInput();
             Player player = new Player(playerName);
             player.setCurrentPosition(0);
             players.add(player);
@@ -49,30 +47,33 @@ public class MonopolyGame {
     }
 
     public void startRound() {
-        System.out.println("Tour " + (rounds + 1));
+        ui.displayMessage("Tour " + (rounds + 1));
+
     
         for (Player player : players) {
             int roll = dice.roll();
-            System.out.println(player.getName() + " lance les dés et obtient " + roll);
+            ui.displayMessage(player.getName() + " lance les dés et obtient " + roll);
             player.move(roll);
     
             // Récupération de la case actuelle en fonction de la position du joueur
             Case currentCase = board.getCases().get(player.getCurrentPosition());
     
             // Affichage de la case sur laquelle le joueur est tombé
-            System.out.println(player.getName() + " atterrit sur la case " + currentCase.getNom());
-    
+            ui.displayMessage(player.getName() + " atterrit sur la case " + currentCase.getNom());
+
             // Action spécifique à la case
             if (currentCase instanceof Property) {
                 Property property = (Property) currentCase;
                 if (property.getOwner() == null) {
-                    System.out.println("Case " + property.getNom() + " - Prix : " + property.getPrice());
-                    System.out.print("Voulez-vous acheter cette propriété ? (Oui/Non) : ");
-                    String response = scanner.next();
+                    ui.displayMessage("Case " + property.getNom() + " - Prix : " + property.getPrice());
+
+                    ui.displayMessage("Voulez-vous acheter cette propriété ? (Oui/Non) : ");
+                    String response = ui.getInput();
+
                     if (response.equalsIgnoreCase("Oui")) {
                         property.effectuerAction(player); // Le joueur décide d'acheter la propriété
                     } else {
-                        System.out.println("Vous avez choisi de ne pas acheter la propriété.");
+                        ui.displayMessage("Vous avez choisi de ne pas acheter la propriété.");
                     }
                 } else {
                     //si la propriété a déjà un propriétaire payer le loyer
@@ -101,10 +102,10 @@ public class MonopolyGame {
     
 
     public void displayGameState() {
-        System.out.println("État du jeu :");
+        ui.displayMessage("État du jeu :");
 
         for (Player player : players) {
-            System.out.print(player.getName() + " - Argent : " + player.getMoney() + " - Position : " + player.getCurrentPosition() + " - ");
+            ui.displayMessage(player.getName() + " - Argent : " + player.getMoney() + " - Position : " + player.getCurrentPosition() + " - ");
 
             Case currentCase = null;
             for (Case aCase : board.getCases()) {
@@ -116,24 +117,24 @@ public class MonopolyGame {
             if (currentCase != null) {
                 if (currentCase instanceof Property) {
                     Property property = (Property) currentCase;
-                    System.out.println("Case " + property.getName() + " - Prix : " + property.getPrice());
+                    ui.displayMessage("Case " + property.getName() + " - Prix : " + property.getPrice());
                 } else {
-                    System.out.println("Case " + currentCase.getNom());
+                    ui.displayMessage("Case " + currentCase.getNom());
                 }
             } else {
-                System.out.println("Aucune case trouvée.");
+                ui.displayMessage("Aucune case trouvée.");
             }
         }
     }
 
     public void displayOwnedProperties() {
-        System.out.println("Propriétés possédées par les joueurs :");
+        ui.displayMessage("Propriétés possédées par les joueurs :");
 
         for (Case aCase : board.getCases()) {
             if (aCase instanceof Property) {
                 Property property = (Property) aCase;
                 if (property.getOwner() != null) {
-                    System.out.println(property.getName() + " - Propriétaire : " + property.getOwner().getName());
+                    ui.displayMessage(property.getName() + " - Propriétaire : " + property.getOwner().getName());
                 }
             }
         }
@@ -150,7 +151,7 @@ public class MonopolyGame {
             if (player.getMoney() <= 0) {
                 bankruptPlayers.add(player);
                 releaseProperties(player); // Libérer les propriétés du joueur
-                System.out.println(player.getName() + " a été éliminé du jeu.");
+                ui.displayMessage(player.getName() + " a été éliminé du jeu.");
             }
         }
         players.removeAll(bankruptPlayers); // Retirer tous les joueurs en faillite de la liste des joueurs actifs
@@ -162,14 +163,10 @@ public class MonopolyGame {
                 Property property = (Property) aCase;
                 if (property.getOwner() == player) {
                     property.setOwner(null); // Libérer la propriété en réinitialisant son propriétaire
-                    System.out.println("La propriété " + property.getNom() + " a été libérée.");
+                    ui.displayMessage("La propriété " + property.getNom() + " a été libérée.");
                 }
             }
         }
     }
 
-    public static void main(String[] args) {
-        MonopolyGame game = new MonopolyGame();
-        game.playGame();
-    }
 }
