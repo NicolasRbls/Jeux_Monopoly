@@ -3,43 +3,59 @@ import java.util.List;
 
 public class Board {
     private List<Case> cases;
-    public static final int NUM_CASES = 22 ; //le nombre total de cases
+    public static final int NUM_CASES = 40 ; //le nombre total de cases
 
     public Board() {
         cases = new ArrayList<>();
     }
 
     public void initialize() {
-        //ici les différentes cases du Monopoly au plateau
+        addCase(new EmptyCase("Départ"));
         addCase(new Property("Boulevard de Belleville", 60, 30));
+        addCase(new CommunityChestCase("Caisse de Communauté 1"));
         addCase(new Property("Rue Lecourbe", 60, 30));
-        addCase(new Property("Avenue de la République", 100, 50));
-        addCase(new Property("Boulevard de la Villette", 100, 50));
-        addCase(new Property("Avenue de Neuilly", 120, 60));
+        addCase(new EmptyCase("Impôt sur le revenu"));
+        addCase(new EmptyCase("Gare Montparnasse")); //EmptyCase pour les gares
+        addCase(new Property("Rue de Vaugirard", 100, 50));
+        addCase(new ChanceCase("Chance 1"));
+        addCase(new Property("Rue de Courcelles", 100, 50));
+        addCase(new Property("Avenue de la République", 120, 60));
+        addCase(new EmptyCase("Prison"));
+        addCase(new Property("Boulevard de la Villette", 140, 70));
+        addCase(new EmptyCase("Compagnie d'électricité")); //EmptyCase pour les compagnies
+        addCase(new Property("Avenue de Neuilly", 160, 80));
         addCase(new Property("Rue de Paradis", 140, 70));
-        addCase(new Property("Avenue Mozart", 140, 70));
-        addCase(new Property("Boulevard Saint-Michel", 160, 80));
-        addCase(new Property("Place Pigalle", 180, 90));
-        addCase(new Property("Avenue Matignon", 180, 90));
-        addCase(new Property("Boulevard Malesherbes", 200, 100));
-        addCase(new Property("Avenue Henri-Martin", 220, 110));
-        addCase(new Property("Cours de Vincennes", 220, 110));
-        addCase(new Property("Avenue de la République", 240, 120));
-        addCase(new Property("Rue de Courcelles", 260, 130));
-        addCase(new Property("Avenue de Neuilly", 260, 130));
-        addCase(new Property("Rue de la Fayette", 280, 140));
-        addCase(new Property("Avenue Niel", 300, 150));
-        addCase(new Property("Avenue Montaigne", 300, 150));
-        addCase(new Property("Boulevard Saint-Michel", 320, 160));
-        addCase(new Property("Avenue Foch", 350, 175));
-        addCase(new Property("Boulevard des Capucines", 400, 200));
-        //plusieur types de cases 
-
-        //ne pas dépasser la limite maximale
+        addCase(new EmptyCase("Gare de Lyon")); //EmptyCase pour les gares
+        addCase(new Property("Avenue Mozart", 180, 90));
+        addCase(new CommunityChestCase("Caisse de Communauté 2"));
+        addCase(new Property("Boulevard Saint-Michel", 180, 90));
+        addCase(new Property("Place Pigalle", 200, 100));
+        addCase(new EmptyCase("Parc Gratuit"));
+        addCase(new Property("Avenue Matignon", 220, 110));
+        addCase(new ChanceCase("Chance 2"));
+        addCase(new Property("Boulevard Malesherbes", 220, 110));
+        addCase(new Property("Avenue Henri-Martin", 240, 120));
+        addCase(new EmptyCase("Gare du Nord")); //EmptyCase pour les gares
+        addCase(new Property("Faubourg Saint-Honoré", 260, 130));
+        addCase(new Property("Place de la Bourse", 260, 130));
+        addCase(new EmptyCase("Compagnie des Eaux")); //EmptyCase pour les compagnies
+        addCase(new Property("Rue La Fayette", 280, 140));
+        addCase(new EmptyCase("Allez en Prison"));
+        addCase(new Property("Avenue de Breteuil", 300, 150));
+        addCase(new Property("Avenue Foch", 300, 150));
+        addCase(new CommunityChestCase("Caisse de Communauté 3"));
+        addCase(new Property("Boulevard des Capucines", 320, 160));
+        addCase(new EmptyCase("Gare Saint-Lazare")); //EmptyCase pour les gares
+        addCase(new ChanceCase("Chance 3"));
+        addCase(new Property("Avenue des Champs-Élysées", 350, 175));
+        addCase(new EmptyCase("Taxe de luxe"));
+        addCase(new Property("Rue de la Paix", 400, 200));
+    
         if (cases.size() > NUM_CASES) {
             throw new IllegalStateException("Le nombre maximum de cases a été atteint.");
         }
     }
+    
 
     public List<Case> getCases() {
         return cases;
