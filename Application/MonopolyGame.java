@@ -48,7 +48,6 @@ public class MonopolyGame {
 
     public void startRound() {
         ui.displayMessage("Tour " + (rounds + 1));
-
     
         for (Player player : players) {
             int roll = dice.roll();
@@ -60,28 +59,46 @@ public class MonopolyGame {
     
             // Affichage de la case sur laquelle le joueur est tombé
             ui.displayMessage(player.getName() + " atterrit sur la case " + currentCase.getNom());
-
-            // Action spécifique à la case
+    
+            // Décisions et actions spécifiques à la case
             if (currentCase instanceof Property) {
                 Property property = (Property) currentCase;
-                if (property.getOwner() == null) {
-                    ui.displayMessage("Case " + property.getNom() + " - Prix : " + property.getPrice());
-
-                    ui.displayMessage("Voulez-vous acheter cette propriété ? (Oui/Non) : ");
-                    String response = ui.getInput();
-
-                    if (response.equalsIgnoreCase("Oui")) {
-                        property.effectuerAction(player); // Le joueur décide d'acheter la propriété
-                    } else {
-                        ui.displayMessage("Vous avez choisi de ne pas acheter la propriété.");
-                    }
+                handlePropertyAction(player, property);
+            } else {
+                // Pour les autres types de cases, exécutez l'action associée.
+                // Cette implémentation doit être ajustée si les autres cases nécessitent des interactions utilisateur.
+                String actionResult = currentCase.effectuerAction(player);
+                if (actionResult != null && !actionResult.isEmpty()) {
+                    ui.displayMessage(actionResult);
+                }
+            }
+        }
+    }
+    
+    private void handlePropertyAction(Player player, Property property) {
+        if (property.getOwner() == null) {
+            ui.displayMessage("Case " + property.getNom() + " - Prix : " + property.getPrice());
+            ui.displayMessage("Voulez-vous acheter cette propriété ? (Oui/Non) : ");
+            String response = ui.getInput();
+            if ("Oui".equalsIgnoreCase(response)) {
+                // Vérifie si le joueur peut acheter la propriété
+                if (player.getMoney() >= property.getPrice()) {
+                    property.setOwner(player);
+                    player.retirerArgent(property.getPrice());
+                    ui.displayMessage("Vous avez acheté " + property.getNom() + ".");
                 } else {
-                    //si la propriété a déjà un propriétaire payer le loyer
-                    property.effectuerAction(player);
+                    ui.displayMessage("Vous n'avez pas assez d'argent pour acheter cette propriété.");
                 }
             } else {
-                //exécuter simplement l'action de la case
-                currentCase.effectuerAction(player);
+                ui.displayMessage("Vous avez choisi de ne pas acheter la propriété.");
+            }
+        } else {
+            // Gestion du paiement du loyer si la propriété a déjà un propriétaire
+            if (property.getOwner() != player) {
+                int rent = property.calculateRent();
+                player.retirerArgent(rent);
+                property.getOwner().ajouterArgent(rent);
+                ui.displayMessage(player.getName() + " paie un loyer de " + rent + " à " + property.getOwner().getName() + ".");
             }
         }
     }

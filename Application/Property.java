@@ -41,24 +41,26 @@ public class Property extends Case {
     }
 
     @Override
-    public void effectuerAction(Player joueur) {
+    public String effectuerAction(Player joueur) {
+        String actionResult = "";
         if (owner == null) {
-            //si la propriété n'a pas de propriétaire, le joueur peut l'acheter
+            // Si la propriété n'a pas de propriétaire, le joueur peut l'acheter.
             if (joueur.getMoney() >= price) {
-                //le joueur a suffisamment d'argent pour acheter la propriété
+                // Le joueur a suffisamment d'argent pour acheter la propriété.
                 joueur.retirerArgent(price);
                 setOwner(joueur);
-                System.out.println(joueur.getName() + " a acheté la propriété " + getName());
+                actionResult = joueur.getName() + " a acheté la propriété " + getName() + ".";
             } else {
-                System.out.println(joueur.getName() + " n'a pas assez d'argent pour acheter la propriété " + getName());
+                actionResult = joueur.getName() + " n'a pas assez d'argent pour acheter la propriété " + getName() + ".";
             }
         } else if (owner != joueur) {
-            //la propriété a un propriétaire autre que le joueur actuel, collecter le loyer
+            // La propriété a un propriétaire autre que le joueur actuel, collecter le loyer.
             int loyer = calculateRent();
             joueur.retirerArgent(loyer);
             owner.ajouterArgent(loyer);
-            System.out.println(joueur.getName() + " a payé " + loyer + " de loyer à " + owner.getName() + " pour la propriété " + getName());
+            actionResult = joueur.getName() + " a payé " + loyer + " de loyer à " + owner.getName() + " pour la propriété " + getName() + ".";
         }
+        return actionResult;
     }
 
 }

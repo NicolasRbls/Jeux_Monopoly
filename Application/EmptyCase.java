@@ -4,7 +4,8 @@ public class EmptyCase extends Case {
     }
 
     @Override
-    public void effectuerAction(Player joueur) {
-        System.out.println(joueur.getName() + " est sur " + getNom() + ". Aucune action requise.");
+    public String effectuerAction(Player joueur) {
+        // Retourne simplement un message indiquant que le joueur est sur cette case, sans action supplémentaire.
+        return joueur.getName() + " est sur " + getNom() + ". Aucune action requise.";
     }
 }

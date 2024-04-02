@@ -17,5 +17,5 @@ public abstract class Case {
     }
 
     //méthode abstraite
-    public abstract void effectuerAction(Player joueur);
+    public abstract String effectuerAction(Player joueur);
 }

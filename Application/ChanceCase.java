@@ -4,46 +4,36 @@ public class ChanceCase extends Case {
     }
 
     @Override
-    public void effectuerAction(Player joueur) {
+    public String effectuerAction(Player joueur) {
         int action = (int) (Math.random() * 8); // Génère un nombre aléatoire entre 0 et 7
         switch (action) {
             case 0:
-                System.out.println(joueur.getName() + " avance de 5 cases.");
                 joueur.move(5);
-                break;
+                return joueur.getName() + " avance de 5 cases.";
             case 1:
-                System.out.println(joueur.getName() + " recule de 3 cases.");
                 joueur.move(-3);
-                break;
+                return joueur.getName() + " recule de 3 cases.";
             case 2:
-                System.out.println(joueur.getName() + " reçoit 50.");
                 joueur.ajouterArgent(50);
-                break;
+                return joueur.getName() + " reçoit 50.";
             case 3:
-                System.out.println(joueur.getName() + " perd 75.");
                 joueur.retirerArgent(75);
-                break;
+                return joueur.getName() + " perd 75.";
             case 4:
-                System.out.println(joueur.getName() + " avance à la case départ.");
                 joueur.setCurrentPosition(0);
-                break;
+                return joueur.getName() + " avance à la case départ.";
             case 5:
-                System.out.println(joueur.getName() + " échange de position avec le dernier joueur.");
-                //a faire plus tard
-                break;
+                // Implementation future
+                return joueur.getName() + " échange de position avec le dernier joueur.";
             case 6:
-                // Simule un nouveau lancer de dés
-                int roll = (int) (Math.random() * 6) + 1; 
-                System.out.println(joueur.getName() + " double son lancer de dés et avance de " + (roll) + " cases.");
+                int roll = (int) (Math.random() * 6) + 1;
                 joueur.move(roll);
-                break;
+                return joueur.getName() + " double son lancer de dés et avance de " + roll + " cases.";
             case 7:
-                System.out.println(joueur.getName() + " paie des frais de 50.");
                 joueur.retirerArgent(50);
-                break;
+                return joueur.getName() + " paie des frais de 50.";
             default:
-                System.out.println("Erreur: action non définie.");
-                break;
+                return "Erreur: action non définie.";
         }
     }
 }
