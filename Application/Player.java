@@ -2,6 +2,8 @@ public class Player {
     private String name;
     private int money;
     private int currentPosition;
+    private boolean inJail = false;
+    private int turnsInJail = 0;
 
     public Player(String name) {
         this.name = name;
@@ -44,6 +46,26 @@ public class Player {
 
     public void setCurrentPosition(int position) {
         this.currentPosition = position;
+    }
+
+    // Méthodes pour gérer le statut en prison
+    public boolean isInJail() {
+        return inJail;
+    }
+
+    public void setInJail(boolean inJail) {
+        this.inJail = inJail;
+        this.turnsInJail = inJail ? 1 : 0; // Réinitialiser le compte des tours en prison
+    }
+
+    public void incrementTurnsInJail() {
+        if (inJail) {
+            turnsInJail++;
+        }
+    }
+
+    public int getTurnsInJail() {
+        return turnsInJail;
     }
     
 

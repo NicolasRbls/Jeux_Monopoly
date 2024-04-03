@@ -7,6 +7,9 @@ public class MonopolyGame {
     private Dice dice;
     private int rounds;
     private IUserInterface ui;
+    private int lastDiceRoll;
+    private static int freeParkingPot = 0;
+
 
 
     public MonopolyGame(IUserInterface ui) {
@@ -48,11 +51,22 @@ public class MonopolyGame {
 
     public void startRound() {
         ui.displayMessage("Tour " + (rounds + 1));
-    
+
         for (Player player : players) {
+            // Gère le tour si le joueur est en prison
+            if (player.isInJail()) {
+                handleJailTurn(player);
+                // Continuez au prochain joueur si le joueur est toujours en prison après handleJailTurn
+                if (player.isInJail()) {
+                    continue;
+                }
+            }
+    
             int roll = dice.roll();
-            ui.displayMessage(player.getName() + " lance les dés et obtient " + roll);
-            player.move(roll);
+            int roll2 = dice.roll();
+            lastDiceRoll = roll + roll2; // Stockez le total du lancer pour utilisation ultérieure
+            ui.displayMessage(player.getName() + " lance les dés et obtient " + lastDiceRoll);
+            player.move(lastDiceRoll);
     
             // Récupération de la case actuelle en fonction de la position du joueur
             Case currentCase = board.getCases().get(player.getCurrentPosition());
@@ -66,7 +80,6 @@ public class MonopolyGame {
                 handlePropertyAction(player, property);
             } else {
                 // Pour les autres types de cases, exécutez l'action associée.
-                // Cette implémentation doit être ajustée si les autres cases nécessitent des interactions utilisateur.
                 String actionResult = currentCase.effectuerAction(player);
                 if (actionResult != null && !actionResult.isEmpty()) {
                     ui.displayMessage(actionResult);
@@ -74,14 +87,13 @@ public class MonopolyGame {
             }
         }
     }
-    
+
     private void handlePropertyAction(Player player, Property property) {
         if (property.getOwner() == null) {
             ui.displayMessage("Case " + property.getNom() + " - Prix : " + property.getPrice());
             ui.displayMessage("Voulez-vous acheter cette propriété ? (Oui/Non) : ");
             String response = ui.getInput();
             if ("Oui".equalsIgnoreCase(response)) {
-                // Vérifie si le joueur peut acheter la propriété
                 if (player.getMoney() >= property.getPrice()) {
                     property.setOwner(player);
                     player.retirerArgent(property.getPrice());
@@ -92,16 +104,25 @@ public class MonopolyGame {
             } else {
                 ui.displayMessage("Vous avez choisi de ne pas acheter la propriété.");
             }
-        } else {
-            // Gestion du paiement du loyer si la propriété a déjà un propriétaire
-            if (property.getOwner() != player) {
-                int rent = property.calculateRent();
-                player.retirerArgent(rent);
-                property.getOwner().ajouterArgent(rent);
-                ui.displayMessage(player.getName() + " paie un loyer de " + rent + " à " + property.getOwner().getName() + ".");
+        } else if (property.getOwner() != player) {
+            // Le calcul du loyer peut varier en fonction du type de propriété
+            int rent = 0;
+            if (property instanceof Station) {
+                rent = calculateStationRent(property.getOwner());
+            } else if (property instanceof Utility) {
+                rent = calculateUtilityRent(property.getOwner());
+            } else {
+                rent = property.calculateRent();
             }
+            
+            player.retirerArgent(rent);
+            property.getOwner().ajouterArgent(rent);
+            ui.displayMessage(player.getName() + " paie un loyer de " + rent + " à " + property.getOwner().getName() + " pour la propriété " + property.getNom() + ".");
+        
         }
+        // Pas d'action si le joueur est le propriétaire
     }
+    
     
 
     public boolean isGameOver() {
@@ -185,5 +206,94 @@ public class MonopolyGame {
             }
         }
     }
+
+    private int calculateStationRent(Player owner) {
+        int ownedStations = 0;
+        for (Case c : board.getCases()) {
+            if (c instanceof Station && ((Station) c).getOwner() == owner) {
+                ownedStations++;
+            }
+        }
+        // Le loyer est calculé en fonction du nombre de gares possédées.
+        return 25 * (int) Math.pow(2, ownedStations - 1);
+    }
+    
+    private int calculateUtilityRent(Player owner) {
+        int ownedUtilities = 0;
+        for (Case c : board.getCases()) {
+            if (c instanceof Utility && ((Utility) c).getOwner() == owner) {
+                ownedUtilities++;
+            }
+        }
+        // Le loyer pour les compagnies dépend du résultat des dés.
+        int diceRoll = getLastDiceRoll(); // Assurez-vous d'implémenter cette méthode.
+        return diceRoll * (ownedUtilities == 1 ? 4 : 10);
+    }
+    
+    public int getLastDiceRoll() {
+        return lastDiceRoll;
+    }
+    
+
+    private void handleJailTurn(Player player) {
+        if (player.isInJail()) {
+            ui.displayMessage(player.getName() + " est en prison. Tour en prison: " + player.getTurnsInJail());
+    
+            // Si le joueur est en prison pour le 3e tour, il doit payer pour sortir.
+            if (player.getTurnsInJail() >= 3) {
+                ui.displayMessage(player.getName() + " doit payer 50 pour sortir de prison car c'est le 3e tour en prison.");
+                if (player.getMoney() >= 50) {
+                    player.retirerArgent(50);
+                    player.setInJail(false);
+                    ui.displayMessage(player.getName() + " paie 50 et sort de prison.");
+                    //ne se deplace pas après avoir payé.
+                } else {
+                    ui.displayMessage(player.getName() + " n'a pas assez d'argent et reste en prison.");
+                    //si il n'a pas l'argent il reste en prison (peut-être faillite)
+                }
+                return; // Termine la méthode ici pour éviter d'exécuter le reste du code si le joueur sort de prison de cette manière.
+            }
+    
+            // Option de payer pour sortir immédiatement, disponible avant le 3e tour
+            ui.displayMessage("Payer 50 pour sortir ou essayer de lancer un double? (Payer/Double) : ");
+            String response = ui.getInput();
+            if ("Payer".equalsIgnoreCase(response)) {
+                if (player.getMoney() >= 50) {
+                    player.retirerArgent(50);
+                    player.setInJail(false);
+                    ui.displayMessage(player.getName() + " paie 50 et sort de prison.");
+                    return; // Sortie anticipée de la méthode
+                } else {
+                    ui.displayMessage(player.getName() + " n'a pas assez d'argent.");
+                }
+            }
+    
+            // Tentez de lancer un double pour sortir
+            int roll1 = dice.roll();
+            int roll2 = dice.roll();
+            ui.displayMessage(player.getName() + " lance les dés pour essayer de sortir de prison.");
+            if (roll1 == roll2) {
+                player.setInJail(false);
+                ui.displayMessage(player.getName() + " lance un double " + roll1 + " et sort de prison.");
+                //player.move(roll1 + roll2); // Le joueur se déplace du total des dés après être sorti
+            } else {
+                ui.displayMessage(player.getName() + " ne lance pas un double et reste en prison.");
+                player.incrementTurnsInJail();
+            }
+        }
+    }
+
+    public static void addToFreeParkingPot(int amount) {
+        freeParkingPot += amount;
+    }
+    
+    public static int getFreeParkingPot() {
+        return freeParkingPot;
+    }
+    
+    public static void resetFreeParkingPot() {
+        freeParkingPot = 0;
+    }
+    
 
 }
