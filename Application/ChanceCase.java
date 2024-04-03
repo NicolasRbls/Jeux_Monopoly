@@ -25,7 +25,7 @@ public class ChanceCase extends Case {
                 joueur.setCurrentPosition(0);
                 return joueur.getName() + " avance à la case départ.";
             case 5:
-                // Implementation future
+                //a faire
                 return joueur.getName() + " échange de position avec le dernier joueur.";
             case 6:
                 int roll = (int) (Math.random() * 6) + 1;

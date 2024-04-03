@@ -20,7 +20,7 @@ public class CommunityChestCase extends Case {
                 return joueur.getName() + " reçoit 200.";
             case 3:
                 // a faire 
-                return joueur.getName() + " doit payer 50 à chaque joueur. L'argent va dans le pot du Parc Gratuit.";
+                return joueur.getName() + " doit payer 50 à chaque joueur.";
             case 4:
                 int montantHeritage = 100;
                 joueur.ajouterArgent(montantHeritage);
