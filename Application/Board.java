@@ -49,7 +49,7 @@ public class Board {
         addCase(new Station("Gare Saint-Lazare",200)); 
         addCase(new ChanceCase("Chance 3"));
         addCase(new Property("Avenue des Champs-Élysées", 350, 175));
-        addCase(new Tax("Taxe de luxe" , 150));
+        addCase(new Tax("Taxe de luxe" ,150));
         addCase(new Property("Rue de la Paix", 400, 200));
     
         if (cases.size() > NUM_CASES) {

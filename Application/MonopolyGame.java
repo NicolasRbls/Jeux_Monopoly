@@ -73,6 +73,14 @@ public class MonopolyGame {
     
             // Affichage de la case sur laquelle le joueur est tombé
             ui.displayMessage(player.getName() + " atterrit sur la case " + currentCase.getNom());
+
+            // Si le joueur atterrit sur une de ses propriétés traditionnelles, proposer de construire.
+            if (currentCase instanceof Property 
+                && !((currentCase instanceof Station) || (currentCase instanceof Utility)) 
+                && ((Property) currentCase).getOwner() == player) {
+                manageConstructions(player, (Property) currentCase); 
+            }
+
     
             // Décisions et actions spécifiques à la case
             if (currentCase instanceof Property) {
@@ -294,6 +302,54 @@ public class MonopolyGame {
     public static void resetFreeParkingPot() {
         freeParkingPot = 0;
     }
+
+    private void manageConstructions(Player player, Property property) {
+        if (property.getOwner() == player) {
+            ui.displayMessage(property.getName() + " : " + property.getHouses() + " maisons, Hôtel? " + property.hasHotel());
+    
+            // Demander au joueur s'il veut construire une maison ou un hôtel
+            ui.displayMessage("Construire sur " + property.getName() + "? (1: Maison, 2: Hôtel, 0: Passer)");
+            String response = ui.getInput();
+            switch (response) {
+                case "1": // Construire une maison
+                    if (property.getHouses() < 4 && !property.hasHotel()) {
+                        if (player.getMoney() >= property.getHouseCost()) {
+                            player.retirerArgent(property.getHouseCost());
+                            property.addHouse();
+                            ui.displayMessage("Une maison a été ajoutée sur " + property.getName());
+                        } else {
+                            ui.displayMessage("Fonds insuffisants pour construire une maison.");
+                        }
+                    } else {
+                        ui.displayMessage("Impossible de construire plus de maisons ou un hôtel est déjà présent.");
+                    }
+                    break;
+                case "2": // Construire un hôtel
+                    if (property.getHouses() == 4) {
+                        if (player.getMoney() >= property.getHotelCost()) {
+                            player.retirerArgent(property.getHotelCost());
+                            property.buildHotel();
+                            ui.displayMessage("Un hôtel a été construit sur " + property.getName());
+                        } else {
+                            ui.displayMessage("Fonds insuffisants pour construire un hôtel.");
+                        }
+                    } else {
+                        ui.displayMessage("Vous devez avoir 4 maisons avant de pouvoir construire un hôtel.");
+                    }
+                    break;
+                case "0": // Passer
+                    break;
+                default:
+                    ui.displayMessage("Choix non valide.");
+                    break;
+            }
+        } else {
+            ui.displayMessage("Vous ne pouvez construire que sur vos propriétés.");
+        }
+    }
+    
+    
+    
     
 
 }
