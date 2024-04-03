@@ -347,8 +347,5 @@ public class MonopolyGame {
         }
     }
     
-    
-    
-    
 
 }
