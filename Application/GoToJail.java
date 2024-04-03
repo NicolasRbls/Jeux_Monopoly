@@ -5,8 +5,8 @@ public class GoToJail extends Case {
 
     @Override
     public String effectuerAction(Player joueur) {
-        joueur.setInJail(true); // Marquez le joueur comme étant en prison
-        joueur.setCurrentPosition(Board.JAIL_POSITION); // Déplacez le joueur en prison
+        joueur.setInJail(true); //Marque le joueur comme étant en prison
+        joueur.setCurrentPosition(Board.JAIL_POSITION); //Déplace le joueur en prison
         return joueur.getName() + " va directement en prison et est placé sur la case prison!";
     }
 }

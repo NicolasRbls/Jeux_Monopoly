@@ -57,7 +57,7 @@ public class Property extends Case {
         if (hotel) {
             return baseRent * 5;
         }
-        return baseRent + houses * (baseRent / 2); // Juste un exemple, ajustez selon vos règles
+        return baseRent + houses * (baseRent / 2); // calcul du loyer
     }
 
     public int getHouses(){

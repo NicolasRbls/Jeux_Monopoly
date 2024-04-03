@@ -56,7 +56,7 @@ public class MonopolyGame {
             // Gère le tour si le joueur est en prison
             if (player.isInJail()) {
                 handleJailTurn(player);
-                // Continuez au prochain joueur si le joueur est toujours en prison après handleJailTurn
+                //Continue au prochain joueur si le joueur est toujours en prison après handleJailTurn
                 if (player.isInJail()) {
                     continue;
                 }
@@ -74,7 +74,7 @@ public class MonopolyGame {
             // Affichage de la case sur laquelle le joueur est tombé
             ui.displayMessage(player.getName() + " atterrit sur la case " + currentCase.getNom());
 
-            // Si le joueur atterrit sur une de ses propriétés traditionnelles, proposer de construire.
+            // joueur atterrit sur une de ses propriétés traditionnelles, proposer de construire.
             if (currentCase instanceof Property 
                 && !((currentCase instanceof Station) || (currentCase instanceof Utility)) 
                 && ((Property) currentCase).getOwner() == player) {
@@ -87,7 +87,7 @@ public class MonopolyGame {
                 Property property = (Property) currentCase;
                 handlePropertyAction(player, property);
             } else {
-                // Pour les autres types de cases, exécutez l'action associée.
+                // autres types de cases, exécutez l'action associée.
                 String actionResult = currentCase.effectuerAction(player);
                 if (actionResult != null && !actionResult.isEmpty()) {
                     ui.displayMessage(actionResult);
@@ -234,7 +234,7 @@ public class MonopolyGame {
             }
         }
         // Le loyer pour les compagnies dépend du résultat des dés.
-        int diceRoll = getLastDiceRoll(); // Assurez-vous d'implémenter cette méthode.
+        int diceRoll = getLastDiceRoll(); 
         return diceRoll * (ownedUtilities == 1 ? 4 : 10);
     }
     
@@ -259,7 +259,7 @@ public class MonopolyGame {
                     ui.displayMessage(player.getName() + " n'a pas assez d'argent et reste en prison.");
                     //si il n'a pas l'argent il reste en prison (peut-être faillite)
                 }
-                return; // Termine la méthode ici pour éviter d'exécuter le reste du code si le joueur sort de prison de cette manière.
+                return; // sort de prison de cette manière.
             }
     
             // Option de payer pour sortir immédiatement, disponible avant le 3e tour
@@ -283,7 +283,6 @@ public class MonopolyGame {
             if (roll1 == roll2) {
                 player.setInJail(false);
                 ui.displayMessage(player.getName() + " lance un double " + roll1 + " et sort de prison.");
-                //player.move(roll1 + roll2); // Le joueur se déplace du total des dés après être sorti
             } else {
                 ui.displayMessage(player.getName() + " ne lance pas un double et reste en prison.");
                 player.incrementTurnsInJail();
